@@ -2,6 +2,18 @@ version: '3.7'
 
 services:
 
+  server:
+    container_name: jds_server
+    image: node:19.2.0
+    environment:
+      - SERVER_PORT=3000
+    volumes:
+      - './server:/home/node'
+    ports:
+      - 3000:3000
+    command:
+      ['node', '/home/node/main.js']
+
   mongo_db:
     container_name: jds_db
     image: mongo:5.0
