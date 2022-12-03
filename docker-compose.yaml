@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+
+  mongo_db:
+    container_name: jds_db
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=foobar
+    volumes:
+      - './data/db:/data/db'
+    expose:
+      - 27017
+
+  mongo_express:
+    container_name: jds_admin
+    image: mongo-express:1.0.0-alpha
+    restart: always
+    environment:
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=foobar
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_SERVER=mongo_db
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo_db
+
+networks:
+  default:
+    name: jds_network
+    driver: bridge
