@@ -1,6 +1,7 @@
 {
   "name": "json-storage-server",
   "version": "1.0.0",
+  "type": "module",
   "description": "Simple JSON storage server",
   "main": "main.js",
   "scripts": {
