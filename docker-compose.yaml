@@ -11,8 +11,9 @@ services:
       - './server:/home/node'
     ports:
       - 3000:3000
+    working_dir: /home/node
     command:
-      ['node', '/home/node/main.js']
+      ['npm', 'run', 'start']
 
   mongo_db:
     container_name: jds_db

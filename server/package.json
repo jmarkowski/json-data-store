@@ -5,6 +5,7 @@
   "description": "Simple JSON storage server",
   "main": "main.js",
   "scripts": {
+    "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jan Markowski",
