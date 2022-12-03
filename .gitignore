@@ -1,0 +1,5 @@
+# Ignore persistent data
+data/
+
+# Installed node packages
+node_modules/
