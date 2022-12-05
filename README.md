@@ -1,9 +1,95 @@
 # JSON Data Store
 
-This server allows you to create, read, update, and delete JSON data.
+This server allows you to create, read, update, and delete JSON data
+in a persistent document database.
 
-It's basically a specialized type of object store that is greatly simplified,
-meant for aiding in testing and development of RESTful APIs.
+The backend [node](https://nodejs.org) service runs an
+[Express](https://expressjs.com) web framework to make available the API engine.
+All data is persistently stored in [MongoDB](https://mongodb.com).
 
-The motivation behind this server is to enable quick testing of frontend
-applications that need to interact with a RESTful backend.
+## Purpose
+
+The server is a specialized type of object store that is meant for aiding
+in the testing and development of frontend applications interacting with
+RESTful APIs.
+
+
+# Initialization
+
+Install the `npm` packages required by the server:
+
+```
+$ cd server
+$ npm install
+```
+
+The various services (node, mongo, mongo express) may be initialized with the
+following command:
+
+```
+$ docker-compose up
+```
+
+The server will be up and running at `http://localhost:3000`.
+
+
+# Interacting with Data
+
+## Curl
+
+Various scripts are for creating, reading, updating, and deleting data.
+
+### POST
+
+Add new data to specified `resource`.
+
+```
+$ ./post <resource> '<data>'
+```
+
+e.g. `post users '{ "username": "john" }'`
+
+### GET
+
+Retrieve data from a specified `resource`, optionally with given `id`.
+
+```
+$ ./get <resource> [<id>]
+```
+
+e.g. `get users` or `get users 638e47db`
+
+### DELETE
+
+Delete all data given a `resource`, or with a specific `id`.
+
+```
+$ ./delete <resource> [<id>]
+```
+
+e.g. `delete users` or `delete users 638e47db`
+
+### PATCH
+
+Partially update existing data at a given `resource` and `id`.
+
+```
+$ ./patch <resource> <id> '<data>'
+```
+
+e.g. `patch users 638e47db '{ "password": "foobar" }'`
+
+### PUT
+
+Replace data at a given `resource` and `id`.
+
+```
+$ ./put <resource> <id> '<data>'
+```
+
+e.g. `put users 638e47db '{ "username": "alicia", "password": "foobar" }'`
+
+
+## Mongo Express
+
+You can administer the data using a browser at `http://localhost:8081`.
