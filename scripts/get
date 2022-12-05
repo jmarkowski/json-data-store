@@ -1,0 +1,17 @@
+#!/bin/bash
+if [[ "$#" -lt 1 ]]; then
+  echo "Usage: get <resource> [<id>]";
+  exit 1
+fi
+
+resource=$1
+
+if [[ "$#" -ge 2 ]]; then
+  resourceId=$2
+fi
+
+cmd="curl -X GET \
+  http://localhost:3000/api/$resource/$resourceId"
+
+echo $cmd
+eval $cmd

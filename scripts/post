@@ -1,0 +1,17 @@
+#!/bin/bash
+if [[ "$#" -lt 2 ]]; then
+  echo "Usage: post <resource> '<data>'";
+  exit 1
+fi
+
+resource=$1
+shift 1
+data="'$*'"
+
+cmd="curl -X POST \
+  --header 'Content-Type: application/json' \
+  --data $data \
+  http://localhost:3000/api/$resource"
+
+echo $cmd
+eval $cmd
