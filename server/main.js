@@ -77,23 +77,92 @@ app.route('/api/:resource')
 app.route('/api/:resource/:resourceId')
   .get(async (req, res) => {
     // Retrieve one data item
-    console.log(`GET ${req.url} (not implemented)`);
-    res.status(200).end();
+    console.log(`GET ${req.url}`);
+
+    const resource = req.params.resource;
+    const resourceId = req.params.resourceId;
+
+    try {
+      // Technically only need the resource ID, but for completeness add the
+      // resource path as well.
+      const data = await Data.findOne({
+        resource: resource,
+        _id: resourceId,
+      });
+      res.send(data);
+    } catch (err) {
+      res.status(200).json({
+        'error': err.message,
+      });
+    }
   })
   .patch(async (req, res) => {
     // Update one data item
-    console.log(`PATCH ${req.url} (not implemented)`);
-    res.status(200).end();
+    console.log(`PATCH ${req.url}: ${JSON.stringify(req.body)}`);
+
+    const resource = req.params.resource;
+    const resourceId = req.params.resourceId;
+
+    try {
+      const update = {
+        $set: {
+          data: req.body,
+        }
+      }
+
+      await Data.findOneAndUpdate({
+        resource: resource,
+        _id: resourceId,
+      }, update, { upsert: true}).exec();
+      res.status(200).end();
+    } catch (err) {
+      res.status(200).json({
+        'error': err.message,
+      });
+    }
   })
   .put(async (req, res) => {
     // Replace one data item
-    console.log(`PUT ${req.url} (not implemented)`);
-    res.status(200).end();
+    console.log(`PUT ${req.url}: ${JSON.stringify(req.body)}`);
+
+    const resource = req.params.resource;
+    const resourceId = req.params.resourceId;
+
+    const newData = {
+      resource: resource,
+      data: req.body,
+    };
+
+    try {
+      await Data.findOneAndReplace({
+        resource: resource,
+        _id: resourceId,
+      }, newData);
+      res.status(200).end();
+    } catch (err) {
+      res.status(200).json({
+        'error': err.message,
+      });
+    }
   })
   .delete(async (req, res) => {
     // Delete one data item
-    console.log(`DELETE ${req.url} (not implemented)`);
-    res.status(200).end();
+    console.log(`DELETE ${req.url}`);
+
+    const resource = req.params.resource;
+    const resourceId = req.params.resourceId;
+
+    try {
+      await Data.deleteOne({
+        resource: resource,
+        _id: resourceId,
+      });
+      res.send(200).end();
+    } catch (err) {
+      res.status(200).json({
+        'error': err.message,
+      });
+    }
   })
 
 const port = process.env.SERVER_PORT;
