@@ -50,8 +50,12 @@ app.route('/api/:resource')
     });
 
     try {
-      await newData.save();
-      res.status(200).end();
+      const doc = await newData.save();
+      const loc = `${req.url}/${doc._id}`;
+
+      // Set the Location HTTP header
+      res.header('Location', loc);
+      res.status(201).json(doc);
     } catch (err) {
       res.status(200).json({
         'error': err.message,
