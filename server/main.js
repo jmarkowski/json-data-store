@@ -33,7 +33,7 @@ app.route('/api/:resource')
       const data = await Data.find({ resource: resource });
       res.send(data);
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     };
@@ -44,16 +44,20 @@ app.route('/api/:resource')
 
     const resource = req.params.resource;
 
-    const newData = new Data({
+    const newData = {
       resource: resource,
       data: req.body,
-    });
+    };
 
     try {
-      await newData.save();
-      res.status(200).end();
+      const doc = await new Data(newData).save();
+      const loc = `${req.url}/${doc._id}`;
+
+      // Set the Location HTTP header
+      res.header('Location', loc);
+      res.status(201).json(doc);
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     };
@@ -68,7 +72,7 @@ app.route('/api/:resource')
       await Data.deleteMany({ resource: resource });
       res.status(200).end();
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -82,6 +86,10 @@ app.route('/api/:resource/:resourceId')
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
 
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
+
     try {
       // Technically only need the resource ID, but for completeness add the
       // resource path as well.
@@ -91,7 +99,7 @@ app.route('/api/:resource/:resourceId')
       });
       res.send(data);
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -102,6 +110,10 @@ app.route('/api/:resource/:resourceId')
 
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
+
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
 
     try {
       const update = {
@@ -116,7 +128,7 @@ app.route('/api/:resource/:resourceId')
       }, update, { upsert: true}).exec();
       res.status(200).end();
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -128,19 +140,38 @@ app.route('/api/:resource/:resourceId')
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
 
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
+
     const newData = {
       resource: resource,
       data: req.body,
     };
 
     try {
-      await Data.findOneAndReplace({
+      const dataExists = await Data.exists({
         resource: resource,
         _id: resourceId,
-      }, newData);
-      res.status(200).end();
+      });
+
+      if (dataExists) {
+        await Data.findOneAndReplace({
+          resource: resource,
+          _id: resourceId,
+        }, newData);
+        res.status(200).end();
+      } else {
+        // Create new data
+        const doc = await new Data(newData).save();
+        const loc = `${req.url}/${doc._id}`;
+
+        // Set the Location HTTP header
+        res.header('Location', loc);
+        res.status(201).json(doc);
+      }
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -152,6 +183,10 @@ app.route('/api/:resource/:resourceId')
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
 
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
+
     try {
       await Data.deleteOne({
         resource: resource,
@@ -159,7 +194,7 @@ app.route('/api/:resource/:resourceId')
       });
       res.send(200).end();
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }

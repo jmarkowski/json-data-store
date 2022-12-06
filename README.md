@@ -7,6 +7,9 @@ The backend [node](https://nodejs.org) service runs an
 [Express](https://expressjs.com) web framework to make available the API engine.
 All data is persistently stored in [MongoDB](https://mongodb.com).
 
+The server HTTP responses mainly conform to
+[RFC7231](https://www.rfc-editor.org/rfc/rfc7231#section-4.3).
+
 ## Purpose
 
 The server is a specialized type of object store that is meant for aiding
