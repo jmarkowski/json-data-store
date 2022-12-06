@@ -86,6 +86,10 @@ app.route('/api/:resource/:resourceId')
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
 
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
+
     try {
       // Technically only need the resource ID, but for completeness add the
       // resource path as well.
@@ -106,6 +110,10 @@ app.route('/api/:resource/:resourceId')
 
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
+
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
 
     try {
       const update = {
@@ -132,6 +140,10 @@ app.route('/api/:resource/:resourceId')
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
 
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
+
     const newData = {
       resource: resource,
       data: req.body,
@@ -155,6 +167,10 @@ app.route('/api/:resource/:resourceId')
 
     const resource = req.params.resource;
     const resourceId = req.params.resourceId;
+
+    if (!mongoose.isObjectIdOrHexString(resourceId)) {
+      res.status(400).end();
+    }
 
     try {
       await Data.deleteOne({
