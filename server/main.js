@@ -44,13 +44,13 @@ app.route('/api/:resource')
 
     const resource = req.params.resource;
 
-    const newData = new Data({
+    const newData = {
       resource: resource,
       data: req.body,
-    });
+    };
 
     try {
-      const doc = await newData.save();
+      const doc = await new Data(newData).save();
       const loc = `${req.url}/${doc._id}`;
 
       // Set the Location HTTP header
@@ -150,11 +150,26 @@ app.route('/api/:resource/:resourceId')
     };
 
     try {
-      await Data.findOneAndReplace({
+      const dataExists = await Data.exists({
         resource: resource,
         _id: resourceId,
-      }, newData);
-      res.status(200).end();
+      });
+
+      if (dataExists) {
+        await Data.findOneAndReplace({
+          resource: resource,
+          _id: resourceId,
+        }, newData);
+        res.status(200).end();
+      } else {
+        // Create new data
+        const doc = await new Data(newData).save();
+        const loc = `${req.url}/${doc._id}`;
+
+        // Set the Location HTTP header
+        res.header('Location', loc);
+        res.status(201).json(doc);
+      }
     } catch (err) {
       res.status(200).json({
         'error': err.message,
