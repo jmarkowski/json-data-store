@@ -10,8 +10,9 @@ if [[ "$#" -ge 2 ]]; then
   resourceId=$2
 fi
 
-cmd="curl -X DELETE \
+cmd="curl \
+  -w '\\nStatus: %{http_code}\\nHeaders:\\n%{header_json}\\n' \
+  -X DELETE \
   http://localhost:3000/api/$resource/$resourceId"
 
-echo $cmd
 eval $cmd

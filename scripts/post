@@ -8,10 +8,11 @@ resource=$1
 shift 1
 data="'$*'"
 
-cmd="curl -X POST \
+cmd="curl \
+  -w 'Status: %{http_code}\\nHeaders:\\n%{header_json}\\n' \
+  -X POST \
   --header 'Content-Type: application/json' \
   --data $data \
   http://localhost:3000/api/$resource"
 
-echo $cmd
 eval $cmd

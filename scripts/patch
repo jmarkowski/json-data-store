@@ -9,10 +9,11 @@ resourceId=$2
 shift 2
 data="'$*'"
 
-cmd="curl -X PATCH \
+cmd="curl \
+  -w 'Status: %{http_code}\\nHeaders:\\n%{header_json}\\n' \
+  -X PATCH \
   --header 'Content-Type: application/json' \
   --data $data \
   http://localhost:3000/api/$resource/$resourceId"
 
-echo $cmd
 eval $cmd
