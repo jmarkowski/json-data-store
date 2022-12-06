@@ -33,7 +33,7 @@ app.route('/api/:resource')
       const data = await Data.find({ resource: resource });
       res.send(data);
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     };
@@ -57,7 +57,7 @@ app.route('/api/:resource')
       res.header('Location', loc);
       res.status(201).json(doc);
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     };
@@ -72,7 +72,7 @@ app.route('/api/:resource')
       await Data.deleteMany({ resource: resource });
       res.status(200).end();
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -99,7 +99,7 @@ app.route('/api/:resource/:resourceId')
       });
       res.send(data);
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -128,7 +128,7 @@ app.route('/api/:resource/:resourceId')
       }, update, { upsert: true}).exec();
       res.status(200).end();
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -171,7 +171,7 @@ app.route('/api/:resource/:resourceId')
         res.status(201).json(doc);
       }
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
@@ -194,7 +194,7 @@ app.route('/api/:resource/:resourceId')
       });
       res.send(200).end();
     } catch (err) {
-      res.status(200).json({
+      res.status(500).json({
         'error': err.message,
       });
     }
