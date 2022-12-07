@@ -1,9 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 const mongoUrl = 'mongodb://root:foobar@mongo_db:27017';
 const dbName = 'storeDB';
