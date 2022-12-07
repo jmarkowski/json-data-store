@@ -1,4 +1,10 @@
 #!/bin/bash
+script_path=$(realpath $0)
+script_dir=$(dirname $script_path);
+source $script_dir/../.env 2> /dev/null
+
+port=${SERVER_PORT:-3000}
+
 if [[ "$#" -lt 3 ]]; then
   echo "Usage: patch <resource> <id> '<data>'";
   exit 1
@@ -14,6 +20,6 @@ cmd="curl \
   -X PATCH \
   --header 'Content-Type: application/json' \
   --data $data \
-  http://localhost:3000/api/$resource/$resourceId"
+  http://localhost:${port}/api/$resource/$resourceId"
 
 eval $cmd

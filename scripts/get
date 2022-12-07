@@ -1,4 +1,10 @@
 #!/bin/bash
+script_path=$(realpath $0)
+script_dir=$(dirname $script_path);
+source $script_dir/../.env 2> /dev/null
+
+port=${SERVER_PORT:-3000}
+
 if [[ "$#" -lt 1 ]]; then
   echo "Usage: get <resource> [<id>]";
   exit 1
@@ -13,6 +19,6 @@ fi
 cmd="curl \
   -w '\\nStatus: %{http_code}\\nHeaders:\\n%{header_json}\\n' \
   -X GET \
-  http://localhost:3000/api/$resource/$resourceId"
+  http://localhost:${port}/api/$resource/$resourceId"
 
 eval $cmd

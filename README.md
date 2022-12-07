@@ -33,7 +33,16 @@ following command:
 $ docker-compose up
 ```
 
-The server will be up and running at `http://localhost:3000`.
+By default, the server will be up and running at `http://localhost:3000`.
+
+
+## Configuration
+
+You can change the default port (3000) to whatever suits you by copying the
+`env-template` file to `.env`, and modifying the `SERVER_PORT` variable.
+
+Configuration settings are read upon initialization, so ensure the services are
+restarted after modifying the environment.
 
 
 # Interacting with Data

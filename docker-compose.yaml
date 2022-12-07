@@ -6,11 +6,11 @@ services:
     container_name: jds_server
     image: node:19.2.0
     environment:
-      - SERVER_PORT=3000
+      - SERVER_PORT=${SERVER_PORT:-3000}
     volumes:
       - './server:/home/node'
     ports:
-      - 3000:3000
+      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
     working_dir: /home/node
     command:
       ['npm', 'run', 'start']
