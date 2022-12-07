@@ -33,7 +33,7 @@ following command:
 $ docker-compose up
 ```
 
-The server will be up and running at `http://localhost:3000`.
+By default, the server will be up and running at `http://localhost:3000`.
 
 
 # Interacting with Data
