@@ -1,4 +1,8 @@
 #!/bin/bash
+script_path=$(realpath $0)
+script_dir=$(dirname $script_path);
+source $script_dir/../.env 2> /dev/null
+
 if [[ "$#" -lt 2 ]]; then
   echo "Usage: post <resource> '<data>'";
   exit 1
